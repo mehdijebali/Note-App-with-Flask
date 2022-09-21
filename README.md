@@ -1,0 +1,1 @@
+# Create App for writing notes with flask
