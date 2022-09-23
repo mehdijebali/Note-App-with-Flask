@@ -25,7 +25,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from .models import db, User
+    from models import db, User
 
     db.init_app(app)
     migrate = Migrate(app, db)
@@ -47,7 +47,7 @@ def create_app(test_config=None):
                 error = 'Username is already taken.'
 
             if error is None:
-                user = User(username=username, password=password)
+                user = User(username=username, password=generate_password_hash(password))
                 db.session.add(user)
                 db.session.commit()
                 flash("Successfully signed up! Please log in.", 'success')
