@@ -80,7 +80,7 @@ def create_app(test_config=None):
             if error is None:
                 session.clear()
                 session['user_id'] = user.id
-                return redirect(url_for('index'))
+                return redirect(url_for('note_index'))
 
             flash(error, category='error')
         return render_template('log_in.html')
@@ -89,6 +89,10 @@ def create_app(test_config=None):
     @require_login
     def note_index():
         return render_template('note_index.html', notes=g.user.notes)
+    
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
 
     @app.route('/notes/new', methods=('GET', 'POST'))
     @require_login
@@ -111,6 +115,12 @@ def create_app(test_config=None):
             flash(error, 'error')
 
         return render_template('note_create.html')
+    
+    @app.route('/notes/<note_id>/edit')
+    @require_login
+    def note_update(note_id):
+        note = Note.query.filter_by(user_id=g.user.id, id=note_id).first_or_404()
+        return render_template('note_update.html', note=note)
 
     @app.route('/log_out', methods=('GET', 'DELETE'))
     def log_out():
