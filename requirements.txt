@@ -1,5 +1,6 @@
-os
 flask
 flask_sqlalchemy
+flask_migrate
 mistune
 sqlalchemy.orm
+psycopg2-binary
